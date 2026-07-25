@@ -1,5 +1,7 @@
 
+from pydoc import text
 from fastapi import APIRouter, Depends,HTTPException,status
+from sqlalchemy import text
 from database import get_db
 from schemas import TaskRead,TaskCreate,TaskUpdate
 from sqlalchemy.orm import Session
@@ -42,6 +44,13 @@ def create_task(task:TaskCreate,db:Session=Depends(get_db)):
     db.commit()
     db.refresh(new_task)
     return new_task
+
+
+@router.post('/reset')
+def reset_tasks(db:Session=Depends(get_db)):
+    db.query(Task).delete()
+    db.commit()
+    return {"message":"All tasks have been reset successfully"}
 
 
 @router.put('/{id}',status_code=status.HTTP_200_OK)
