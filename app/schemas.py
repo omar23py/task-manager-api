@@ -25,3 +25,9 @@ class TaskRead(TaskBase):
         model_config = {"from_attributes": True}
        
        
+       
+       
+class QueryParams(BaseModel):
+        search :str|None =Field(default=None, min_length=1, max_length=100,example="project",description="Search for tasks by title. Provide a string to search for tasks containing that string in their title.")
+        done : bool|None = Field(default=None,example=True,description="Filter tasks based on their completion status. Set to true to retrieve completed tasks, or false for incomplete tasks.")
+        
