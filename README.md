@@ -4,19 +4,21 @@ A simple RESTful API for managing tasks, built with **FastAPI**, **SQLAlchemy**,
 
 ## Features
 
-- Create, read, update, and delete tasks (CRUD)
-- Filter tasks by completion status
-- Search tasks by title
-- Health check endpoint
-- Automatic interactive API docs via Swagger UI
+- ✅ Create, read, update, and delete tasks (CRUD)
+- 🔍 Filter tasks by completion status
+- 🔎 Search tasks by title
+- 💚 Health check endpoint
+- 🔄 Reset all tasks endpoint
 
 ## Tech Stack
 
-- Python
-- FastAPI
-- SQLAlchemy
-- SQLite
-- Pydantic
+| Technology | Icon |
+|-----------|------|
+| Python | 🐍 |
+| FastAPI | ⚡ |
+| SQLAlchemy | 🔗 |
+| SQLite | 💾 |
+| Pydantic | ✅ |
 
 ## Project Structure
 
@@ -89,17 +91,23 @@ The API will be available at:
 
 ### Tasks
 
-- `GET /tasks/` — Get all tasks
+- `GET /tasks/` — Get all tasks with optional filtering by title or completion status
 - `GET /tasks/{id}` — Get a task by ID
-- `GET /tasks/done/{done}` — Get tasks filtered by done status (`true`/`false`)
-- `GET /tasks/search/{search}` — Search tasks by title
 - `POST /tasks/` — Create a new task
 - `PUT /tasks/{id}` — Update an existing task (partial update supported)
 - `DELETE /tasks/{id}` — Delete a task
+- `POST /tasks/reset` — Reset all tasks (delete all tasks from database)
 
-## Example Request
+## Query Parameters
 
-Create a task:
+The `GET /tasks/` endpoint supports optional query parameters:
+
+- `search` (string, optional) — Search for tasks by title. Provide a string to search for tasks containing that string in their title.
+- `done` (boolean, optional) — Filter tasks based on their completion status. Set to `true` to retrieve completed tasks, or `false` for incomplete tasks.
+
+## Example Requests
+
+### Create a task:
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/tasks/" \
@@ -111,10 +119,50 @@ curl -X POST "http://127.0.0.1:8000/tasks/" \
   }'
 ```
 
+### Get all tasks:
+
+```bash
+curl -X GET "http://127.0.0.1:8000/tasks/"
+```
+
+### Get completed tasks:
+
+```bash
+curl -X GET "http://127.0.0.1:8000/tasks/?done=true"
+```
+
+### Search tasks by title:
+
+```bash
+curl -X GET "http://127.0.0.1:8000/tasks/?search=assignment"
+```
+
+### Update a task:
+
+```bash
+curl -X PUT "http://127.0.0.1:8000/tasks/1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "done": true
+  }'
+```
+
+### Delete a task:
+
+```bash
+curl -X DELETE "http://127.0.0.1:8000/tasks/1"
+```
+
+### Reset all tasks:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/tasks/reset"
+```
+
 ## Notes
 
 - CORS is currently configured with permissive defaults (`allow_origins=["*"]`).
-- This project currently uses SQLite for local development and learning purposes.
+- This API is built as an assignment for flyRank internship.
 
 ## Author
 
