@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Annotated
+
+from pydantic import BaseModel, Field, StringConstraints
 
 
 class TaskBase(BaseModel):
@@ -13,9 +14,9 @@ class TaskCreate(TaskBase):
 
 
 class TaskUpdate(BaseModel):
-    title: Optional[str] = Field(default=None, min_length=2, max_length=100)
-    description: Optional[str] = Field(default=None, min_length=2, max_length=1000)
-    done: Optional[bool] = Field(default=None)
+    title: str | None = Field(default=None, min_length=2, max_length=100)
+    description: str | None = Field(default=None, min_length=2, max_length=1000)
+    done: bool | None = Field(default=None)
 
 
 class TaskRead(TaskBase):
@@ -24,7 +25,9 @@ class TaskRead(TaskBase):
 
 
 class QueryParams(BaseModel):
-    search: str | None = Field(
+    search: Annotated[
+        str | None, StringConstraints(to_lower=True, strip_whitespace=True)
+    ] = Field(
         default=None,
         min_length=1,
         max_length=100,
