@@ -1,8 +1,7 @@
+from database import Base, engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import tasks
-from database import Base, engine
-
 
 Base.metadata.create_all(bind=engine)
 
